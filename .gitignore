@@ -1,0 +1,10 @@
+BUILD/
+.mbed-cache/
+compile_commands.json
+.clangd
+.cache/
+mbed/
+*.bin
+*.hex
+*.elf
+*.map
