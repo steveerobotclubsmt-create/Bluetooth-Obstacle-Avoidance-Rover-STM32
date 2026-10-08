@@ -17,7 +17,7 @@ A two-wheel robot car built on an **STM32 Nucleo-F401RE** running **Mbed OS 2**.
 - **Obstacle avoidance** using a 3-bit left/front/right detection mask with a 10 cm threshold (see the [table below](#navigation-logic))
 - **Bluetooth telemetry**: live left/front/right distances are sent back about twice a second
 - **Emergency stop** (`E`) works in every mode
-- **Non-blocking ultrasonic timeouts**: echo waits are capped at 15 ms and 25 ms, so the control loop never hangs. If nothing is in range, the reading becomes 400 cm
+- **Fail-safe ultrasonic reading**: echo waits are capped at 15 ms and 25 ms, so the control loop never hangs. Both "nothing in range" and a dead or unplugged sensor read as 400 cm (clear), never as a phantom obstacle
 
 ## Hardware
 
@@ -108,7 +108,6 @@ The project is an **Mbed 2 (classic)** program for the `NUCLEO_F401RE` target, b
 - Motor speed is fixed at full, because ENA/ENB are tied high. Driving them with PWM would allow speed control.
 - The `wait()` calls block, so the robot can't react to commands or sensors while turning or running the arm gesture. Moving to interrupts or an RTOS (Mbed OS 6 threads) would make it more responsive.
 - Pin note: on the Nucleo-F401RE, `D13` and `LED1` are the same pin (`PA_5`). The front ultrasonic echo input shares a pin with the status LED.
-- If an HC-SR04 is unplugged or dead, its echo pin never goes high and `get_us_dist()` returns about 0 cm. In autonomous mode, the robot treats that as an obstacle on that side. A one-line check after the first wait loop, returning 400 when no echo started, would fix it.
 
 ## Context
 

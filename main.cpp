@@ -80,6 +80,7 @@ float get_us_dist(DigitalOut& t, DigitalIn& e) {
     t = 0; wait_us(2); t = 1; wait_us(10); t = 0;
     pulseTimer.reset(); pulseTimer.start();
     while(e == 0 && pulseTimer.read_ms() < 15);
+    if (e == 0) { pulseTimer.stop(); return 400.0f; }   // echo never started (sensor unplugged/dead): no reading, not 0 cm
     pulseTimer.reset();
     while(e == 1 && pulseTimer.read_ms() < 25);
     pulseTimer.stop();
